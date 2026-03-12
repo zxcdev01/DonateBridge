@@ -1,0 +1,32 @@
+http-port: 8765
+secret-token: "ЗАМЕНИ_НА_СВОЙ_СЕКРЕТНЫЙ_ТОКЕН"
+
+ranks:
+  "ADMIN": "admin"
+  "D.ADMIN": "dadmin"
+  "UNIVERSAL": "universal"
+  "NELL": "nell"
+  "PEGAS": "pegas"
+  "VAMPIRE": "vampire"
+  "GOD": "god"
+  "COBRA": "cobra"
+  "SPLINTER": "splinter"
+  "D.HELPER": "dhelper"
+  "D.MODER": "dmoder"
+
+durations:
+  "admin": 0
+  "dadmin": 0
+  "universal": 0
+  "nell": 0
+  "pegas": 0
+  "vampire": 0
+  "god": 0
+  "cobra": 0
+  "splinter": 0
+  "dhelper": 0
+  "dmoder": 0
+
+messages:
+  rank-given: "&a[NellGrief] &fСпасибо за покупку! Привилегия &e{rank} &fвыдана!"
+  rank-given-offline: "&a[NellGrief] &fПривилегия &e{rank} &fбудет выдана при входе."
