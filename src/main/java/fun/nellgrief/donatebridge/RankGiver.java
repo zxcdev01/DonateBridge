@@ -3,11 +3,6 @@ package fun.nellgrief.donatebridge;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.node.types.InheritanceNode;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.time.Duration;
 import java.util.Map;
@@ -49,9 +44,15 @@ public class RankGiver {
             return;
         }
 
-        @SuppressWarnings("deprecation")
-        OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(nickname);
-        UUID uuid = offlinePlayer.getUniqueId();
+        UUID uuid;
+        try {
+            @SuppressWarnings("deprecation")
+            org.bukkit.OfflinePlayer offlinePlayer = org.bukkit.Bukkit.getOfflinePlayer(nickname);
+            uuid = offlinePlayer.getUniqueId();
+        } catch (Exception e) {
+            log.warning("Ошибка получения UUID для '" + nickname + "': " + e.getMessage());
+            return;
+        }
 
         if (uuid == null || uuid.equals(new UUID(0, 0))) {
             log.warning("UUID не найден для игрока '" + nickname + "'.");
@@ -66,6 +67,7 @@ public class RankGiver {
         }
         final int finalDays = days;
         final String finalGroup = group;
+        final UUID finalUuid = uuid;
 
         LuckPerms lp;
         try {
@@ -76,7 +78,6 @@ public class RankGiver {
         }
 
         final LuckPerms finalLp = lp;
-        final UUID finalUuid = uuid;
 
         lp.getUserManager().loadUser(uuid).thenAcceptAsync(user -> {
             if (user == null) {
@@ -100,17 +101,14 @@ public class RankGiver {
                     "rank-given",
                     "&a[NellGrief] &fСпасибо за покупку! Привилегия &e{rank} &fвыдана!");
 
-            Bukkit.getServer().getScheduler().runTask((Plugin) plugin, new Runnable() {
-                @Override
-                public void run() {
-                    Player online = Bukkit.getServer().getPlayer(finalUuid);
-                    if (online != null && online.isOnline()) {
-                        String msg = ChatColor.translateAlternateColorCodes('&',
-                                template.replace("{rank}", finalGroup).replace("{player}", nickname));
-                        online.sendMessage(msg);
-                    } else {
-                        log.info("Игрок " + nickname + " оффлайн — привилегия активируется при входе.");
-                    }
+            org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
+                org.bukkit.entity.Player online = org.bukkit.Bukkit.getPlayer(finalUuid);
+                if (online != null && online.isOnline()) {
+                    String msg = org.bukkit.ChatColor.translateAlternateColorCodes('&',
+                            template.replace("{rank}", finalGroup).replace("{player}", nickname));
+                    online.sendMessage(msg);
+                } else {
+                    log.info("Игрок " + nickname + " оффлайн — привилегия активируется при входе.");
                 }
             });
 
