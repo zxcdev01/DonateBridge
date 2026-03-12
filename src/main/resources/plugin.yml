@@ -1,0 +1,18 @@
+name: DonateBridge
+version: 1.0.0
+main: fun.nellgrief.donatebridge.DonateBridge
+api-version: '1.21'
+description: Автоматическая выдача привилегий после оплаты через Platega
+author: NellGrief
+depend: [LuckPerms]
+
+commands:
+  donatebridge:
+    description: Управление плагином DonateBridge
+    usage: /donatebridge <reload|status>
+    permission: donatebridge.admin
+
+permissions:
+  donatebridge.admin:
+    description: Доступ к командам DonateBridge
+    default: op
